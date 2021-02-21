@@ -15,18 +15,20 @@ public with sharing class AccountTriggerHelper {
 		
 		//Assumption - All accounts have a SAP Id
 		for(Account acc : newAccounts){
-			if(isInsert){
+			if(isInsert && acc.Customer_Id__c != null){
 				accCustomerIds.add(acc.Customer_Id__c);
 				accIds.add(acc.Id);
 				accsToUpdate.add(acc);
-			} else if(oldAccountsMap.get(acc.Id).Customer_Id__c != acc.Customer_Id__c){
-				accCustomerIds.add(acc.Customer_Id__c);
+			} else if(!isInsert && oldAccountsMap.get(acc.Id).Customer_Id__c != acc.Customer_Id__c){
+				if(acc.Customer_Id__c != null){
+					accCustomerIds.add(acc.Customer_Id__c);
+				}
 				accsToUpdate.add(acc);
 				accIds.add(acc.Id);
 			}
 		}
 
-		if(accCustomerIds.isEmpty()){
+		if(accsToUpdate.isEmpty()){
 			return;
 		}
 
