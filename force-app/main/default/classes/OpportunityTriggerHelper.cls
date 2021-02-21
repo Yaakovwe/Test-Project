@@ -12,29 +12,30 @@ public with sharing class OpportunityTriggerHelper {
 		Set<String> oppCustomerIds = new Set<String>();
 		List<Opportunity> opportunitiesToUpdate = new List<Opportunity>();
 		for(Opportunity opp : newOpportunities){
-			if(opp.Customer_Id__c != null){
-				if(isInsert){
+			if(isInsert && opp.Customer_Id__c != null){
+				System.assertEquals(true, isInsert, isInsert);
+				oppCustomerIds.add(opp.Customer_Id__c);
+				opportunitiesToUpdate.add(opp);
+			} else if(!isInsert && oldOpportunitiesMap.get(opp.Id).Customer_Id__c != opp.Customer_Id__c){
+				System.assertEquals(false, isInsert, isInsert);
+				if(opp.Customer_Id__c != null){
 					oppCustomerIds.add(opp.Customer_Id__c);
-					opportunitiesToUpdate.add(opp);
-				} else if(oldOpportunitiesMap.get(opp.Id).Customer_Id__c != opp.Customer_Id__c){
-					oppCustomerIds.add(opp.Customer_Id__c);
-					opportunitiesToUpdate.add(opp);
 				}
+				opportunitiesToUpdate.add(opp);
 			}
 		}
 
-		if(oppCustomerIds.isEmpty()){
+		if(opportunitiesToUpdate.isEmpty()){
 			return;
 		}
 
 		Map<String, Id> accountToCustomerMap = getAccountsByCustomerId(oppCustomerIds);
 
 		for(Opportunity newOpp : opportunitiesToUpdate){
-			if(accountToCustomerMap == null && newOpp.Customer_Id__c != null){
-				newOpp.AccountId = null;
-			}
-			else if(accountToCustomerMap.containsKey(newOpp.Customer_Id__c)){
+			if(accountToCustomerMap.containsKey(newOpp.Customer_Id__c)){
 				newOpp.AccountId = accountToCustomerMap.get(newOpp.Customer_Id__c);
+			} else{
+				newOpp.AccountId = null; //To be reviewed. Maybe we don't want to nullify these lookups
 			}
 		}
 	}
@@ -47,8 +48,8 @@ public with sharing class OpportunityTriggerHelper {
 
 		Map <String,Id> accountToCustomerIdMap = new Map<String,Id>();
 		for(Account acc : accountsFromCustomerId){
-			accountToCustomerIdMap.put(acc.Customer_Id__c,acc.Id);
+			accountToCustomerIdMap.put(acc.Customer_Id__c, acc.Id); // Assuming there can't be more then one Account with the same customer Id
 		}
-		return !accountToCustomerIdMap.isEmpty() ? accountToCustomerIdMap : null;
+		return accountToCustomerIdMap;
 	}
 }

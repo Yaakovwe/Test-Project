@@ -13,17 +13,16 @@ public with sharing class AccountTriggerHelper {
 		Set<String> accIds = new Set<String>();
 		List<Account> accsToUpdate = new List<Account>();
 		
+		//Assumption - All accounts have a SAP Id
 		for(Account acc : newAccounts){
-			if(acc.Customer_Id__c != null){
-				if(isInsert){
-					accCustomerIds.add(acc.Customer_Id__c);
-					accIds.add(acc.Id);
-					accsToUpdate.add(acc);
-				} else if(oldAccountsMap.get(acc.Id).Customer_Id__c != acc.Customer_Id__c){
-					accCustomerIds.add(acc.Customer_Id__c);
-					accsToUpdate.add(acc);
-					accIds.add(acc.Id);
-				}
+			if(isInsert){
+				accCustomerIds.add(acc.Customer_Id__c);
+				accIds.add(acc.Id);
+				accsToUpdate.add(acc);
+			} else if(oldAccountsMap.get(acc.Id).Customer_Id__c != acc.Customer_Id__c){
+				accCustomerIds.add(acc.Customer_Id__c);
+				accsToUpdate.add(acc);
+				accIds.add(acc.Id);
 			}
 		}
 
@@ -38,7 +37,7 @@ public with sharing class AccountTriggerHelper {
 		}
 
 		List<Opportunity> oppsToUpdate = new List<Opportunity>();
-		for(Account acc : newAccounts){
+		for(Account acc : accsToUpdate){
 			if(oppToCustomerIdMap.containsKey(acc.Customer_Id__c)){
 				for(Opportunity oppFromMap : oppToCustomerIdMap.get(acc.Customer_Id__c)){
 					if(acc.Id != oppFromMap.AccountId){
@@ -78,6 +77,7 @@ public with sharing class AccountTriggerHelper {
 		];
 
 		Map <String, List<Opportunity>> oppToCustomerIdMap = new Map<String, List<Opportunity>>();
+		//Assumption 1: There can be more then one Opportunity with the same SAP Id
 		for(Opportunity opp : oppsFromCustomerOrAccountId){
 			if(!oppToCustomerIdMap.containsKey(opp.Customer_Id__c)){
 				List<Opportunity> opps = new List<Opportunity>();

@@ -1,13 +1,25 @@
 <template>
-  <div style="height: 300px">
-    <lightning-datatable
-      key-field="id"
-      data={data}
-      show-row-number-column
-      row-number-offset={rowOffset}
-      suppress-bottom-bar
-      columns={columns}
-    >
-    </lightning-datatable>
-  </div>
+	<div class="slds-media slds-media_center marginHeader">
+		<div class="slds-media__figure">
+			<lightning-icon
+				size="small" 
+				icon-name="standard:opportunity" 
+				alternative-text="Opportunities"
+				title="Opportunities">
+			</lightning-icon>
+		</div>
+		<h3
+			class="slds-card__header-title"
+			title="Opportunities"
+		>Opportunities</h3>
+	</div>
+	<lightning-datatable
+		key-field="id"
+		data={data}
+		show-row-number-column
+		row-number-offset={rowOffset}
+		columns={columns}
+		hide-checkbox-column
+	>
+	</lightning-datatable>
 </template>

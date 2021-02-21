@@ -1,32 +1,43 @@
-import { LightningElement } from "lwc";
+import { LightningElement, api, wire } from "lwc";
 import getOpps from "@salesforce/apex/OpportunitiesHelper.getOpps";
 
 const columns = [
-  { label: "Customer Id", fieldName: "Customer_Id__c", editable: true },
+  { label: "Customer Id", fieldName: "Customer_Id__c" },
   {
     label: "Opportunity Name",
-    fieldName: "name",
-    editable: true
+    fieldName: "Name"
   },
   {
     label: "Opportunity Amount",
-    fieldName: "Amount",
-    editable: true
+    fieldName: "Amount"
   },
   {
     label: "Opportunity Owner",
-    fieldName: "OwnerId",
-    editable: true
+    fieldName: "OwnerName"
   }
 ];
 
 export default class opportunitiesDataTable extends LightningElement {
+  @api recordId;
   data = [];
   columns = columns;
   rowOffset = 0;
+  saveDraftValues = [];
 
-  // eslint-disable-next-line @lwc/lwc/no-async-await
-  async connectedCallback() {
-    this.data = await getOpps({ accountId: "0014L0000077HsxQAE" });
+  @wire(getOpps, {
+    accountId: "$recordId"
+  })
+  wiredOpps({ error, data }) {
+    if (error) {
+      console.log(error);
+    } else if (data) {
+      let tempData = [];
+      data.forEach((row) => {
+        let tempRecord = { ...row };
+        tempRecord.OwnerName = row.Owner.Name;
+        tempData.push(tempRecord);
+      });
+      this.data = tempData;
+    }
   }
 }
