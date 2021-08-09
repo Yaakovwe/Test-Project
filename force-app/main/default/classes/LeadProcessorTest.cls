@@ -4,7 +4,8 @@ public with sharing class LeadProcessorTest {
 	static void makeData(){
 		List<Lead> leads = new List<Lead>();
 		for(Integer i = 0; i < 200; i++){
-			Lead lead  = new Lead(LastName = 'Test ' + i, Company = 'Test ' + i);
+			Lead lead  = new Lead(LastName = 'Test ' + i, 
+                Company = 'Test ' + i);
 			leads.add(lead);
 		}
 		Database.insert(leads);
