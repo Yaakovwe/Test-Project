@@ -1,0 +1,36 @@
+<template>
+<table
+    class="slds-table slds-table_bordered slds-table_edit slds-table_fixed-layout slds-table_resizable-cols slds-tree slds-table_tree"
+    role="treegrid" aria-label="" >
+    <thead >
+        <tr class="slds-line-height_reset">
+            <th aria-label="Name" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable"
+                scope="col" style="background-color:#f0f5f5;">
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                    <span class="slds-truncate" title="Question Name">Question Name</span>
+                </div>
+            </th>
+            <th aria-label="Score" aria-sort="none"
+                class="slds-has-button-menu slds-is-resizable slds-is-sortable" scope="col" 
+                style="background-color:#f0f5f5;">
+                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                    <span class="slds-truncate" title="Score">Score</span>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody style="background-color: #e6f7ff;">
+        <template for:each={questions} for:item="question">
+            <tr aria-expanded="false" aria-level="1" aria-posinset="3" aria-selected="false" aria-setsize="4"
+                class="slds-hint-parent" key={question.Id}>
+                <td data-label="Name" class="slds-truncate" role="gridcell">
+                    {question.Name}
+                </td>
+                <td data-label="Score" role="gridcell">
+                    <div class="slds-truncate" title={question.Score__c}>{question.Score__c}</div>
+                </td>
+            </tr>
+        </template>
+    </tbody>
+</table>
+</template>

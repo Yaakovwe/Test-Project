@@ -1,0 +1,67 @@
+<template>
+<table
+    class="slds-table slds-table_bordered slds-table_edit slds-table_fixed-layout slds-table_resizable-cols slds-tree slds-table_tree"
+    role="treegrid" aria-label="">
+    <thead>
+        <tr class="slds-line-height_reset">
+            <th class="slds-text-align_right" scope="col" style="width:3.25rem">
+                <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                <div class="slds-th__action slds-th__action_form">
+                </div>
+            </th>
+            <th aria-label="Exam Name" aria-sort="none"
+                class="slds-has-button-menu slds-is-resizable slds-is-sortable" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="-1">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                        <span class="slds-truncate" title="Exam Name">Exam Name</span>
+                    </div>
+                </a>
+            </th>
+            <th aria-label="Datetime of Exam" aria-sort="none" class="slds-has-button-menu slds-is-resizable slds-is-sortable"
+                scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="-1">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                        <span class="slds-truncate" title="Datetime of Exam">Datetime of Exam</span>
+                    </div>
+                </a>
+            </th>
+            <th aria-label="Total Score" aria-sort="none"
+                class="slds-has-button-menu slds-is-resizable slds-is-sortable" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="-1">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                        <span class="slds-truncate" title="Total Score">Total Score</span>
+                    </div>
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <template for:each={exams} for:item="exam">
+            <tr aria-expanded="false" aria-level="1" aria-posinset="3" aria-selected="false" aria-setsize="4"
+                class="slds-hint-parent" key={exam.Id}>
+                <th class="slds-tree__item" data-label="Exam Name" scope="row">
+                    <c-chevron-button record-id={exam.Id} onclicked={chevronClick}></c-chevron-button>
+                </th>
+                <td data-label="Exam Name" class="slds-truncate" role="gridcell" style="width:3.25rem">
+                    {exam.Name}
+                </td>
+                <td data-label="Datetime of Exam" role="gridcell">
+                    <div class="slds-truncate" title={exam.Datetime_of_Exam__c}>{exam.Datetime_of_Exam__c}</div>
+                </td>
+                <td data-label="Total Score" role="gridcell">
+                    <div class="slds-truncate" title={exam.Total_Score__c}>{exam.Total_Score__c}</div>
+                </td>
+            </tr>
+            <template if:true={exam.open}>
+                <div key={exam.Id} style="width: 57rem; margin-left:3rem">
+                    <c-questions-data-table 
+                        questions={exam.Questions__r} 
+                        key={exam.Id}
+                    >
+                    </c-questions-data-table>
+                </div>
+            </template>
+        </template>
+    </tbody>
+</table>
+</template>

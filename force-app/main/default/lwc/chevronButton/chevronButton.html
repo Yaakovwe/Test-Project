@@ -1,0 +1,13 @@
+<template>
+    <button class="slds-button slds-button_icon slds-button_icon-x-small slds-m-right_x-small" aria-hidden="true"
+        tabindex="-1" title="" onclick={openRow}>
+        <template if:false={open}>
+            <lightning-icon icon-name="utility:chevronright" size="xx-small">
+            </lightning-icon>
+        </template>
+        <template if:true={open}>
+            <lightning-icon icon-name="utility:chevrondown" size="xx-small">
+            </lightning-icon>
+        </template>
+    </button>
+</template>
